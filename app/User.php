@@ -34,4 +34,16 @@ class User extends Authenticatable
     {
         $this->attributes['password'] = bcrypt($password);
     }
+
+    public function isAdmin()
+    {
+        $user=\DB::table('users')->select('email')->where('id',auth()->id())->first();
+        $user_email=$user->email;
+        if(strpos($user_email, '@admin.com') !== false){
+            return true;
+        }
+        else{
+            return false;
+        };
+    }
 }

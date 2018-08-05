@@ -14,12 +14,23 @@
     <br/><h1>Book Your Appointment</h1>
     You have <b>12</b> Appointments left.
     <br/><br/>
+    Pick a Location:
+    <ul>
+    <?php
+    $venues = DB::table('venues')->get();
+    foreach($venues as $venue){
+        echo '<li><a href="/booking/'.$venue->id.'">';
+        echo $venue->address.' '.$venue->postcode;
+        echo '</a></li>';
+    }
+    ?>
+    </ul>
     Search the consultation location nearest to you:
     </span>
     <form action="/booking/venue" method="post">
     {{ csrf_field() }}
     <div class="form-group">
-        <input type="text" name="postcode" id='postcode' placeholder='Postcode'></input>
+        <input type="text" name="postcode" id='postcode' placeholder='Your Location' style='width:30%'></input>
     </div>
     <div class="form-group">
         <button type='submit' class='btn btn-success' class="form-control">Search</button>
@@ -30,24 +41,6 @@
     <form action="/booking" method="post">
     {{ csrf_field() }}
         <?php 
-            $appslots = DB::table('venues')
-                ->join('appointments', 'venues.id', '=', 'appointments.venue_id')
-                ->selectRaw('appointments.id AS id, venues.address AS address, venues.postcode AS postcode, DATE_FORMAT(appointments.start_time, "%h:%i%p") AS start, DATE_FORMAT(appointments.end_time, "%h:%i%p") AS end, appointments.day AS day, appointments.start_time as sorttime')
-                ->where([
-                    ['appointments.booked', '=', '0'],
-                    ['appointments.venue_id', '=', $venue->id],
-                ])
-                ->orderBy('sorttime', 'ASC')
-                ->get();
-            $days = [
-                1 => 'Monday',
-                2 => 'Tuesday',
-                3 => 'Wednesday',
-                4 => 'Thursday',
-                5 => 'Friday',
-                6 => 'Saturday',
-                7 => 'Sunday'
-              ];
             for($i=1; $i<6; $i++){
                 echo '<table class="tableID"><thead><tr><th>';
                 echo $days[date($i)];
@@ -71,12 +64,11 @@
                 }}
                 echo '</tbody>
                 </table>';
-            }
+            };
         ?>
     </form>
     </div>
 </div>
-
 
 
 @endsection

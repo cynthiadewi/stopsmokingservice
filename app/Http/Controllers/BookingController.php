@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\Redirect;
 use App\Venue;
+use App\Appointment;
 use Spatie\GoogleCalendar\Event;
 use Carbon\Carbon;
 
@@ -18,41 +19,107 @@ class BookingController extends Controller
      */
     public function view()
     {
-        return view('/booking');
+        $appslots = \DB::table('appointments')
+            ->join('venues', 'appointments.venue_id', '=', 'venues.id')
+            ->selectRaw('appointments.id AS id, venues.address AS address, venues.postcode AS postcode, DATE_FORMAT(appointments.start_time, "%h:%i%p") AS start, DATE_FORMAT(appointments.end_time, "%h:%i%p") AS end,DATE_FORMAT(appointments.start_time, "%d/%m") AS date, appointments.day AS day, appointments.start_time as sorttime')
+            ->where('appointments.booked','=','0')
+            ->orderBy('sorttime', 'ASC')->get();
+        $days = [
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+            7 => 'Sunday'
+        ];
+        return view('booking.booking', compact('appslots','days'));
     }
 
     public function venueview(Venue $venue)
     {
-        return view('/bookvenue', compact('venue'));
+        $appslots = \DB::table('venues')
+                ->join('appointments', 'venues.id', '=', 'appointments.venue_id')
+                ->selectRaw('appointments.id AS id, venues.address AS address, venues.postcode AS postcode, DATE_FORMAT(appointments.start_time, "%h:%i%p") AS start, DATE_FORMAT(appointments.end_time, "%h:%i%p") AS end, appointments.day AS day, appointments.start_time as sorttime')
+                ->where([
+                    ['appointments.booked', '=', '0'],
+                    ['appointments.venue_id', '=', $venue->id],
+                ])
+                ->orderBy('sorttime', 'ASC')
+                ->get();
+            $days = [
+                1 => 'Monday',
+                2 => 'Tuesday',
+                3 => 'Wednesday',
+                4 => 'Thursday',
+                5 => 'Friday',
+                6 => 'Saturday',
+                7 => 'Sunday'
+              ];
+
+        return view('booking.venue', compact('venue','days','appslots'));
     }
 
     public function book()
     {
         $loggedInID = Auth::user()->id;
+
+        $myreservations = \DB::table('reservations')->where([['user_id','=',$loggedInID],['attend','=','0'],['noshow','=','0']])->get();
+
+        if(count($myreservations)==0){
+
         $id = $_POST['aID'];
         \DB::table('appointments')
         ->where('id',$id)
         ->update(['booked'=> '1']);
         \DB::table('reservations')->insert(['user_id'=>$loggedInID, 'app_id'=>$id]);
-        $start_time=\DB::table('appointments')->select('start_time')->where('id',$id)->first();
-        $start_time=$start_time->start_time;
-        $end_time=\DB::table('appointments')->select('end_time')->where('id',$id)->first();
-        $end_time=$end_time->end_time;
-        $user_email=\DB::table('users')->select('email')->where('id',auth()->id())->first();
-        echo "<script type='text/javascript'>alert('Booking Booked!');</script>";
+        $booked = \DB::table('appointments')->where('id',$id)->first();
+        $venue = \DB::table('venues')->where('id',$booked->venue_id)->first();
+
+        $days = [
+            1 => 'Monday',
+            2 => 'Tuesday',
+            3 => 'Wednesday',
+            4 => 'Thursday',
+            5 => 'Friday',
+            6 => 'Saturday',
+            7 => 'Sunday'
+        ];
+
+        return view('booking.confirm', compact('booked','days','venue'));
+        }
+        else{
+            echo "<script type='text/javascript'>alert('You have already booked an appointment'+'\\n'+
+            'Please cancel your booking from your profile to book another appointment');</script>";
+            return back();
+        };
+    }
+
+    public function addToCalendar()
+    {
+        $id = $_POST['confirm'];
+        $user=\DB::table('users')->select('email')->where('id',auth()->id())->first();
+        $user_email=$user->email;
+        $booked=\DB::table('appointments')->where('id',$id)->first();
+        $start_time=$booked->start_time;
+        $end_time=$booked->end_time;
+        $venue = \DB::table('venues')->where('id',$booked->venue_id)->first();
+        $address = $venue->address.' '.$venue->postcode;
 
         $event = new Event;
-        $event->name = 'Stop Smoking Service Appointment';
+        $event->name = 'Stop Smoking Service Appointment '.$address;
+        $event->startDateTime = new Carbon($start_time, 'Europe/London');
         $event->endDateTime = new Carbon($end_time, 'Europe/London');
-        $event->startDateTime = (new Carbon($end_time, 'Europe/London'))->subMinutes(15);
         $event->addAttendee(['email' => $user_email]);
 
         $event->save('insertEvent');
 
-        return back();
+        echo "<script type='text/javascript'>confirm('Appointment added to your calendar!');</script>";
+
+        return redirect()->to('/home');
     }
 
-    public function distance(Venue $venue)
+    public function distance()
     {
         $postcode1=$_POST['postcode'];
         $distancesbetween=[];
@@ -76,6 +143,6 @@ class BookingController extends Controller
         //$nearestvenue = \DB::table('venues')->where('postcode','=',$minpostcode)->first();
         //$venue = $nearestvenue;
         
-        //return view('/bookvenue', compact('venue'));
+        //return view('booking.venue', compact('venue'));
     }
 }

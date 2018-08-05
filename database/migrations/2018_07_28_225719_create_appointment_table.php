@@ -18,7 +18,7 @@ class CreateAppointmentTable extends Migration
             $table->unsignedInteger('venue_id');
             $table->foreign('venue_id')->references('id')->on('venues');
             $table->unsignedInteger('day');
-            $table->timestamp('start_time');
+            $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
             $table->boolean('booked')->default('0');
             $table->timestamps();

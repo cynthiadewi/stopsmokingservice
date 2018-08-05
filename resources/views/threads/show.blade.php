@@ -7,7 +7,7 @@
 
 @extends('layout.master')
 @section('js')
-<script type="text/javascript" src="{{ URL::asset('js/thread.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/clickshow.js') }}"></script>
 @endsection
 @section('content')
 <div class="container">
@@ -25,7 +25,7 @@
                     {{ csrf_field() }}
                     <?php
                         $group = $thread->group_id;
-                        $groupusers = \DB::table('members')->select('*')->where([['group_id', '=', $group],['user_id', '=', auth()->check()]])->get();
+                        $groupusers = \DB::table('members')->select('*')->where([['group_id', '=', $group],['user_id', '=', auth()->id()]])->get();
                         if($groupusers->count() == !0){
                             echo "<button type='button' class='btn btn-success' onclick='showemail()'>Add Member</button>
                             <div id='showclick' style='display: none;'>

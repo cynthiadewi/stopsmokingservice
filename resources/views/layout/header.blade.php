@@ -37,9 +37,12 @@
                 if(auth()->check())
                 { 
                 $name = \DB::table('users')->select('firstname')->where('id', '=', Auth::user()->id)->first();
-                echo '<a class="dropdown-item" href="#">';
+                echo '<a class="dropdown-item" href="/profile">';
                 echo $name->firstname;
                 echo "'s Profile</a>";
+                if(Auth::user()->isAdmin()){
+                  echo '<a class="dropdown-item" href="/adminbook">Bookings</a>';
+                };
                 echo '<div class="dropdown-divider"></div>';
                 echo '<a class="dropdown-item" href="/logout">Log out</a>';
                 }

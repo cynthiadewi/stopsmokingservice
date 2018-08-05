@@ -7,7 +7,7 @@
 
 @extends('layout.master')
 @section('js')
-<script type="text/javascript" src="{{ URL::asset('js/thread.js') }}"></script>
+<script type="text/javascript" src="{{ URL::asset('js/clickshow.js') }}"></script>
 @endsection
 @section('content')
 <div class="container">

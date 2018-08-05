@@ -19,6 +19,8 @@ class CreateReservationTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedInteger('app_id');
             $table->foreign('app_id')->references('id')->on('appointments');
+            $table->boolean('attend')->default('0');
+            $table->boolean('noshow')->default('0');
             $table->timestamps();
         });
     }
