@@ -21,5 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->command->info('Venues table seeded!');
         $this->call('AppointmentsTableSeeder');
         $this->command->info('Appointments table seeded!');
+        $this->call('ThreadsTableSeeder');
+        $this->command->info('Threads table seeded!');
     }
 }

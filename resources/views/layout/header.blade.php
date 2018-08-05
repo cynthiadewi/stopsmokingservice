@@ -25,7 +25,7 @@
         <a class="nav-link" href="/booking">Book Appointment</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Forum</a>
+        <a class="nav-link" href="/threads">Forum</a>
       </li>
     </ul>
     <div class="navbar-nav nav-item dropdown">

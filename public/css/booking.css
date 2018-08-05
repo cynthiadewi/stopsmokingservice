@@ -25,7 +25,7 @@ bookingcontainer {
 }
 
 table {
-	width: 15%;
+	width: 200px;
 	border-collapse: collapse;
 	overflow: hidden;
 	box-shadow: 0 0 20px rgba(0,0,0,0.1);

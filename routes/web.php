@@ -31,3 +31,12 @@ Route::post('/register', 'RegistrationController@register');
 //booking
 Route::get('/booking', 'BookingController@view')->middleware('auth');
 Route::post('/booking', 'BookingController@book');
+Route::get('/booking/{venue}', 'BookingController@venueview');
+Route::post('/booking/venue', 'BookingController@distance');
+
+//forum
+Route::get('/threads', 'ThreadController@index');
+Route::post('/newthread', 'ThreadController@create');
+Route::get('/threads/{thread}', 'ThreadController@show');
+Route::post('/threads/{thread}/member', 'ThreadController@update');
+Route::post('/threads/{thread}/replies', 'ReplyController@store');

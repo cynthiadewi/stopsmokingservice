@@ -19,7 +19,7 @@ session_start();
     <link rel="stylesheet" href="{{ asset('css/login.css') }}">
     <title>Stop Smoking Services</title>
     @yield('styles')
-    @yield('script')
+    @yield('js')
   </head>
   <body>
     <div class="content">

@@ -24,7 +24,7 @@ class VenuesTableSeeder extends Seeder
             array('address' => 'Newcastle Library, City Centre', 'postcode' => 'NE1 8AX', 'start_time' =>'2018-08-28 10:00:00', 'end_time' =>'2018-08-28 12:00:00'),
             array('address' => 'Walker Centre, Church Walk', 'postcode' => 'NE6 3BS', 'start_time' =>'2018-08-28 14:30:00', 'end_time' =>'2018-08-28 16:30:00'),
             array('address' => 'Newbiggin Hall Childrens Centre', 'postcode' => 'NE5 1LZ', 'start_time' =>'2018-08-28 14:30:00', 'end_time' =>'2018-08-28 16:30:00'),
-            array('address' => 'St Martins Centre, Walker', 'postcode' => 'NE6 2RJL', 'start_time' =>'2018-08-29 08:30:00', 'end_time' =>'2018-08-29 10:30:00'),
+            array('address' => 'St Martins Centre, Walker', 'postcode' => 'NE6 2RJ', 'start_time' =>'2018-08-29 08:30:00', 'end_time' =>'2018-08-29 10:30:00'),
             array('address' => 'West End Library, Conducum Rd', 'postcode' => 'NE4 9JH', 'start_time' =>'2018-08-29 10:00:00', 'end_time' =>'2018-08-29 12:00:00'),
             array('address' => 'Outer West Pool, West Denton', 'postcode' => 'NE5 2QZ', 'start_time' =>'2018-08-29 17:00:00', 'end_time' =>'2018-08-29 19:00:00'),
             array('address' => 'Grainger Market, City Centre', 'postcode' => 'NE1 5AE', 'start_time' =>'2018-08-30 11:30:00', 'end_time' =>'2018-08-30 12:30:00'),

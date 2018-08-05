@@ -32,7 +32,7 @@ namespace App\Http\Controllers;
          
          auth()->login($user);
          
-         return redirect()->to('/login');
+         return redirect()->to('/home');
          
      }
  }
