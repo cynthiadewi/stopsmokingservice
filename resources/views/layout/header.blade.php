@@ -19,7 +19,7 @@
         <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">How To Stop Smoking</a>
+        <a class="nav-link" href="/howto">How To Stop Smoking</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="/booking">Book Appointment</a>

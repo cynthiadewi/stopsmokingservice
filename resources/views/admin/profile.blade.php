@@ -47,16 +47,22 @@
                         <form action="/profile/cancelbooking/{{$profile->id}}" method="post">
                         {{ csrf_field() }}
                         <?php 
-                                echo '<table class="tableID"><tbody>';
-                                foreach($appslots as $slots){
+                                if(count($appslots)==0){
+                                    echo    '<span>You have no appointment booking.</span><br/>';
+                                } else {
+                                    echo '<table class="tableID"><tbody>';
+                                    foreach($appslots as $slots){
                                         echo    '<tr><td>'.$days[date($slots->day)].' '.$slots->date.'</td>';
                                         echo    '<td>'.$slots->address.', '.$slots->postcode.', '.$slots->start.'-'.$slots->end.'</td>';
                                         echo    '<td><button id="cancelbutton" type="submit" name="aID" value="'.$slots->id.'">CANCEL</button>';
                                         echo    '</td></tr>';
                                     }
                                 echo '</tbody></table>';
-                                echo '<br/><h4>Attended Appointments</h4>
-                                        <form action="/profile/cancelbooking/{{$profile->id}}" method="post">';
+                                };
+                                echo '<br/><h4>Attended Appointments</h4>';
+                                if(count($attended)==0){
+                                    echo    '<span>You have no attended booking.</span><br/>';
+                                } else {
                                 echo '<table class="tableID"><tbody>';
                                 foreach($attended as $slots){
                                         echo    '<tr><td>'.$days[date($slots->day)].' '.$slots->date.'</td>';
@@ -64,8 +70,11 @@
                                         echo    '</tr>';
                                     }
                                 echo '</tbody></table>';
-                                echo '<br/><h4>Missed Appointments</h4>
-                                        <form action="/profile/cancelbooking/{{$profile->id}}" method="post">';
+                                };
+                                echo '<br/><h4>Missed Appointments</h4>';
+                                if(count($missed)==0){
+                                    echo    '<span>You have no missed booking.</span><br/>';
+                                } else {
                                 echo '<table class="tableID"><tbody>';
                                 foreach($missed as $slots){
                                         echo    '<tr><td>'.$days[date($slots->day)].' '.$slots->date.'</td>';
@@ -73,6 +82,7 @@
                                         echo    '</tr>';
                                     }
                                 echo '</tbody></table>';
+                                };
                             ?>
                         </form>
                         </div>

@@ -12,12 +12,11 @@
 */
 
 //home
-Route::get('/', function () {
-    return view('home');
-});
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/', function () {return view('home');});
+Route::get('/home', function () {return view('home');})->name('home');
+
+//howto
+Route::get('/howto', function () {return view('howto');})->name('howto');
 
 //login
 Route::get('/login', 'LoginController@view')->name('login');
@@ -42,6 +41,7 @@ Route::post('/newthread', 'ThreadController@create');
 Route::get('/threads/{thread}', 'ThreadController@show');
 Route::post('/threads/{thread}/member', 'ThreadController@update');
 Route::post('/threads/{thread}/replies', 'ReplyController@store');
+Route::post('/threads/{thread}/delete', 'ReplyController@delete');
 
 //profile
 Route::get('/profile', 'ProfileController@view')->middleware('auth');

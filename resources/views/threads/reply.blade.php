@@ -11,5 +11,6 @@
     </div>
     <div class="panel-body">
         {{ $reply->body }}
+        <br/>
     </div>
 </div>

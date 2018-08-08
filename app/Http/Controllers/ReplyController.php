@@ -27,4 +27,11 @@ class ReplyController extends Controller
         ]);
         return back();
     }
+
+    public function delete(Thread $thread)
+    {
+        $reply_id = $_POST['deleteReply'];
+        \DB::table('replies')->where('id', '=', $reply_id)->delete();
+        return back();
+    }
 }

@@ -13,6 +13,7 @@
     <span>
     <br/><h1>Book Your Appointment</h1>
     You have <b>12</b> Appointments left.
+        <br/><a href="/adminbook" class="btn btn-success"> Back </a>
     <br/><br/>
     Search the consultation location nearest to you:
     </span>

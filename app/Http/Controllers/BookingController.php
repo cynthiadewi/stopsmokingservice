@@ -127,22 +127,38 @@ class BookingController extends Controller
         foreach($venues as $venue){
             $postcode2=$venue->postcode;
 
-            $url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=".$postcode1."&destinations=".$postcode2."&key=AIzaSyCU6RUvnDLH7M4BV0lglkRb9PbvamFPrgM";
- 
-            $data = @file_get_contents($url);
+            $url = "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=".urlencode($postcode1)."&destinations=".urlencode($postcode2)."&key=AIzaSyCU6RUvnDLH7M4BV0lglkRb9PbvamFPrgM";
+            ini_set("allow_url_fopen", 1);
+            $data = file_get_contents($url);
  
             $result = json_decode($data, true);
  
             $distancesbetween[$postcode2] = $result["rows"][0]['elements'][0]['distance']['value'];
-        }
-        foreach($distancesbetween as $distance){
-        echo "<script type='text/javascript'>alert('$distance');</script>";
+
         }
         $minpostcode = array_search(min($distancesbetween), $distancesbetween);
-        echo "<script type='text/javascript'>alert('$minpostcode');</script>";
-        //$nearestvenue = \DB::table('venues')->where('postcode','=',$minpostcode)->first();
-        //$venue = $nearestvenue;
+        $nearestvenue = \DB::table('venues')->where('postcode','=',$minpostcode)->first();
+        $venue = $nearestvenue;
         
-        //return view('booking.venue', compact('venue'));
+        $appslots = \DB::table('venues')
+                ->join('appointments', 'venues.id', '=', 'appointments.venue_id')
+                ->selectRaw('appointments.id AS id, venues.address AS address, venues.postcode AS postcode, DATE_FORMAT(appointments.start_time, "%h:%i%p") AS start, DATE_FORMAT(appointments.end_time, "%h:%i%p") AS end, appointments.day AS day, appointments.start_time as sorttime')
+                ->where([
+                    ['appointments.booked', '=', '0'],
+                    ['appointments.venue_id', '=', $venue->id],
+                ])
+                ->orderBy('sorttime', 'ASC')
+                ->get();
+            $days = [
+                1 => 'Monday',
+                2 => 'Tuesday',
+                3 => 'Wednesday',
+                4 => 'Thursday',
+                5 => 'Friday',
+                6 => 'Saturday',
+                7 => 'Sunday'
+              ];
+
+        return view('booking.venue', compact('venue','days','appslots'));
     }
 }

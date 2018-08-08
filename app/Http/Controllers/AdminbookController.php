@@ -105,5 +105,6 @@ class AdminbookController extends Controller
             $id = $_POST['noshow'];
             \DB::table('reservations')->where('app_id',$id)->update(['noshow'=>'1']);
         }
+        return redirect()->to('/adminbook');
     }
 }

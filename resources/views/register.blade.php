@@ -5,7 +5,9 @@
     @library https://www.tutorialrepublic.com
  -->
  @extends('layout.master')
-
+ @section('styles')
+<link rel="stylesheet" href="{{ asset('css/login.css') }}">
+@endsection
 @section('content')
 
 <div class="login-register-form">

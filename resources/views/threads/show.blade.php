@@ -24,16 +24,21 @@
                 <form method='POST' action='{{ $thread->path() . '/member' }}'>
                     {{ csrf_field() }}
                     <?php
-                        $group = $thread->group_id;
-                        $groupusers = \DB::table('members')->select('*')->where([['group_id', '=', $group],['user_id', '=', auth()->id()]])->get();
                         if($groupusers->count() == !0){
+                            echo 'Thread Group: '.$group->name.'<br/><br/>';
+                            if($thread->user_id == auth()->id()){
                             echo "<button type='button' class='btn btn-success' onclick='showemail()'>Add Member</button>
                             <div id='showclick' style='display: none;'>
                                 <div class='form-group'>
                                 <br/><textarea name='newmember' id='newmember' class='form-control' placeholder='Enter Email...' rows='1'></textarea>
-                                    <br/><button type='submit' class='btn btn-success'>Add</button>
+                                    <br/><button type='submit' class='btn btn-success' name='addmember'>Add</button>
                                 </div>
                             </div>";
+                            };
+                            echo "<button type='submit' class='btn btn-success' name='removeme'>Leave Group</button>";
+                        };
+                        if($thread->user_id == auth()->id()){
+                        echo "  <button type='submit' class='btn btn-danger' name='deleteThread'>Delete Thread</button>";
                         };
                     ?>
                 </form>
@@ -46,6 +51,12 @@
          @foreach($thread->replies as $reply)
             <br/>
             @include('threads.reply')
+            @if($reply->user_id == auth()->id())
+            <form method='POST' action='{{ $thread->path() . "/delete" }}'>
+            {{ csrf_field() }}
+                    <button type='submit' name='deleteReply' value='{{$reply->id}}' class='btn btn-link'>Remove Comment</button>
+            </form>
+        @endif
         @endforeach
          </div>
     </div>
